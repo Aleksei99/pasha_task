@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: PashaBankTask
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+    url: jdbc:postgresql://localhost:5432/pasha_bank
+
+kubernetes:
+  pod:
+    name: pasha
+
+rabbitmq:
+  cbar:
+    foreign-transfer:
+      q: CBAR_FOREIGN_TRANSFER
+      dlq: CBAR_FOREIGN_TRANSFER_DLQ
+

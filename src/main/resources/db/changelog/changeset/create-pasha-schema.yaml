@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-pasha-schema
+      author: a.smuraha
+      changes:
+        - sql:
+            sql: CREATE SCHEMA IF NOT EXISTS pasha;

@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-transactions-table
+      author: a.smuraha
+      changes:
+        - createTable:
+            schemaName: pasha
+            tableName: transactions
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value
+                  type: NUMERIC(10, 2)
+                  constraints:
+                    nullable: false
