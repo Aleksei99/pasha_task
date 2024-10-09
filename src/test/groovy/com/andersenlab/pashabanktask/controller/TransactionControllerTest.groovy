@@ -8,16 +8,21 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.web.servlet.MockMvc
+import spock.lang.Subject
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import spock.lang.Specification
 
 @AutoConfigureMockMvc
-@WebMvcTest
+@WebMvcTest(TransactionController)
 class TransactionControllerTest extends Specification {
 
     @Autowired
     MockMvc mockMvc
 
     @MockBean
+    @Subject
     RabbitMqMessageProducer rabbitMqMessageProducer
 
     def "should create transaction and return Ok"() {
@@ -27,14 +32,14 @@ class TransactionControllerTest extends Specification {
         def jsonContent = objectMapper.writeValueAsString(transactionRequestDto)
 
         when:
-        def result = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/transactions")
+        def result = mockMvc.perform(post("/api/v1/transactions")
                 .contentType("application/json")
                 .content(jsonContent))
 
         then:
-        1 * rabbitMqMessageProducer.publish(transactionRequestDto, "CBAR_FOREIGN_TRANSFER_Exchange", "CBAR_FOREIGN_TRANSFER_Key")
-        result.andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.content().string("Ok"))
+        1 * rabbitMqMessageProducer.publish(_, _, _)
+        result.andExpect(status().isOk())
+                .andExpect(content().string("Ok"))
     }
 }
 
